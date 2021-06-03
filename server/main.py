@@ -8,6 +8,7 @@ import os
 import config
 
 port = config.PORT
+host = config.HOST
 
 s = socket.socket()
 s.bind((host, port))
