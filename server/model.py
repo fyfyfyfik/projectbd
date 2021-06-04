@@ -10,7 +10,7 @@ DeclarativeBase = declarative_base()
 
 
 class keys(DeclarativeBase):
-    tablename = "keys"
+    tablename = "Key"
 
     id = Column('id', Integer, primary_key=True)
     Akey = Column('Akey', String)
