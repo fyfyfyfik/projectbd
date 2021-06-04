@@ -1,7 +1,7 @@
 # https://ru.wikibooks.org/wiki/SQLAlchemy
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from model import keys
+from model import Key
 import socket
 import json
 import os
