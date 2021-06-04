@@ -3,6 +3,7 @@
 ## Server
 ```
 git clone https://github.com/fyfyfyfik/projectbd
+sudo apt-get install libqt5x11extras5
 cd projectbd/server
 cp config.py.bak config.py
 python3 -m venv venv
