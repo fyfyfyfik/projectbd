@@ -1,7 +1,7 @@
 # https://ru.wikibooks.org/wiki/SQLAlchemy
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from model import Key
+from model import keys
 import socket
 import json
 import os
@@ -24,7 +24,7 @@ def main():
             engine = create_engine('sqlite:///db.sqlite')
             Session = sessionmaker(bind=engine)
             session = Session()
-            key = session.query(Key).all()
+            key = session.query(keys).all()
             arr_data = []
             with open(file, 'w') as f:
                 for kk in key:

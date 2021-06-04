@@ -7,22 +7,20 @@ import json
 # https://docs.sqlalchemy.org/en/13/orm/extensions/declarative/basic_use.html
 DeclarativeBase = declarative_base()
 
-class keys(DeclarativeBase):
-    __tablename__ = "keys"
+class Stories(DeclarativeBase):
+    __tablename__ = "stories"
 
     id = Column('id', Integer, primary_key=True)
-    Akey = Column('Akey', String)
-    Cname = Column('Cname', String)
-    Edate = Column('Edate', String)
-    Ktype = Column('Ktype', String)
+    hero = Column('hero', String)
+    story = Column('story', String)
+    end = Column('end', String)
 
-    def __init__(self, Akey, Cname, Edate, Ktype):
-        self.Akey = Akey
-        self.Cname = Cname
-        self.Edate = Edate
-        self.Ktype = Ktype
+    def __init__(self, hero, story, end):
+        self.hero = hero
+        self.story = story
+        self.end = end
 
-def add_keys(file_name="add_key.json"):
+def add_stories(file_name="add_story.json"):
     #Создаем объект Engine, который будет использоваться объектами ниже для связи с БД
     # engine = create_engine('postgresql://test:password@localhost:5432/project13')
     engine = create_engine('sqlite:///db.sqlite')
@@ -35,24 +33,24 @@ def add_keys(file_name="add_key.json"):
     session = Session()
 
     # функция для получения историй из файла, созданного администратором или модератором
-    def get_keys():
+    def get_stories():
         with open(file_name, 'r') as f:
             # Парсим джейсон
-            keys = json.loads(f.read())
+            stories = json.loads(f.read())
         # Возвращаем данные
-        return keys['Akey'], keys['Cname'], keys['Edate'], keys['Ktype']
+        return stories['hero'], stories['story'], stories['end']
     # Получаем истории из файла
-    keys = get_stories()
+    stories = get_stories()
     # Создаем новый объект из модели История
-    new_key = Stories(stories[0], stories[1], stories[2])
+    new_horror = Stories(stories[0], stories[1], stories[2])
     # Добавляем
-    session.add(new_key)
+    session.add(new_horror)
     # Сохраняем
     session.commit()
     # Закрываем
     session.close()
 
-    print('New key added')
+    print('Новая история добавлена в базу данных.')
     
 if __name__ == "__main__":
-    add_keys()
+    add_stories()
