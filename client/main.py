@@ -109,9 +109,9 @@ class App(QtWidgets.QMainWindow, form.Ui_MainWindow):
             except Exception as e:
                 errorWin = QtWidgets.QErrorMessage(self)
                 errorWin.showMessage(f'Ошибка: \n{e}')
-            else:
-                errorWin = QtWidgets.QErrorMessage(self)
-                errorWin.showMessage(f'Ошибка: \n{e}')
+            #else:
+                #errorWin = QtWidgets.QErrorMessage(self)
+                #errorWin.showMessage(f'Ошибка: \n{e}')
         
 # MAIN
 if __name__ == '__main__':
