@@ -70,7 +70,7 @@ class App(QtWidgets.QMainWindow, form.Ui_MainWindow):
     # Пересобирает (отдает рандомную хар-ку героя)
     def update_hero(self):
         try:
-            arr = get_content('hero')
+            arr = get_content('Akey')
             self.textBrowser.setText(choice(arr))
         except Exception as e:
             # если ошибка то вылетает окошко с ошибкой
