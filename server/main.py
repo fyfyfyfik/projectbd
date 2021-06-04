@@ -24,10 +24,10 @@ def main():
             engine = create_engine('sqlite:///db.sqlite')
             Session = sessionmaker(bind=engine)
             session = Session()
-            Key = session.query(key).all()
+            key = session.query(Key).all()
             arr_data = []
             with open(file, 'w') as f:
-                for kk in Key:
+                for kk in key:
                     arr_data.append(
                         {"Akey": kk.Akey,
                         "Cname": kk.Cname,
