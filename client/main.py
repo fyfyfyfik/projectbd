@@ -14,7 +14,7 @@ port = config.PORT
 host = config.HOST
 
 # Переменная для файла джайсон
-file = os.getcwd() + '/stories.json'
+file = os.getcwd() + '/keys.json'
 
 # Функция для проверки валидности айпи
 def valid_ip(ip):
