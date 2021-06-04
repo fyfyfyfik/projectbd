@@ -12,8 +12,7 @@ DeclarativeBase = declarative_base()
 class keys(DeclarativeBase):
     __tablename__ = 'Key'
     abstract = True
-    id = Column('id', Integer, primary_key=True)
-    Akey = Column('Akey', String)
+    Akey = Column('Akey', String, primary_key=True)
     Cname = Column('Cname', String)
     Edate = Column('Edate', String)
     Ktype = Column('Ktype', String)
