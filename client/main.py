@@ -71,7 +71,7 @@ class App(QtWidgets.QMainWindow, form.Ui_MainWindow):
             arr = get_content('Cname')
             self.textBrowser_2.setText(choice(arr))
             arr = get_content('Edate')
-            self.textBrowser_1.setText(choice(arr))
+            self.textBrowser.setText(choice(arr))
             arr = get_content('Ktype')
             self.textBrowser_3.setText(choice(arr))
         except Exception as e:
