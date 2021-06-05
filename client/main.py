@@ -59,12 +59,12 @@ class App(QtWidgets.QMainWindow, form.Ui_MainWindow):
         self.setupUi(self)
         
         # Коннектим кнопки к нужным функциям
-        self.pushButton.clicked.connect(self.update_hero)
-        self.pushButton_6.clicked.connect(self.update_stories)
+        self.pushButton.clicked.connect(self.update_key)
+        self.pushButton_6.clicked.connect(self.update_keygen)
         
 
     # Пересобирает (отдает рандомную хар-ку героя)
-    def update_hero(self):
+    def update_key(self):
         try:
             arr = get_content('Akey')
             self.textBrowser_4.setText(choice(arr))
@@ -80,7 +80,7 @@ class App(QtWidgets.QMainWindow, form.Ui_MainWindow):
             errorWin.showMessage(f'Ошибка: \n{e}')
     
     # Кнопка обновления локальной базы
-    def update_stories(self):
+    def update_keygen(self):
         # Спрашиваем у пользователя IP 
         ip, yes = QtWidgets.QInputDialog.getText(self, 'Вход', 'Введи ip сервера:')
         if yes and valid_ip(ip) or ip == 'localhost':
