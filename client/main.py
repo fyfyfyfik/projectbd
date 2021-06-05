@@ -2,18 +2,18 @@ import os
 import ipaddress
 import form
 import sys
-import socket                   # Import socket module
+import socket                   # Импорт модуля сокета
 import json
 from random import choice
 from PyQt5 import QtWidgets, uic
 import config
 
-s = socket.socket()             # Create a socket object
-# Получаем порт и айпи из переменных окружения (для секьюрности)
+s = socket.socket()             # Создание объекта сокета
+# Получение порта и айпи из переменных окружения
 port = config.PORT
 host = socket.gethostname()
 
-# Переменная для файла джайсон
+# Переменная для файла json
 file = os.getcwd() + '/keys.json'
 
 # Функция для проверки валидности айпи
@@ -24,7 +24,8 @@ def valid_ip(ip):
         return False
     else:
         return True
-# Получение контента по именам из файла, например get_content('hero')
+
+# Получение контента по именам из файла, например get_content('Akey')
 def get_content(name):
     name_arr = []
     with open(file, 'r') as f:
@@ -34,7 +35,7 @@ def get_content(name):
         name_arr.append(el[name])
     return name_arr
 
-# Подключение к серверу и скачивае нового файла джейсон
+# Подключение к серверу и скачивание нового файла json
 def update_base(ip):
     s.connect((ip, port))
     with open(file, 'wb') as f:
@@ -47,9 +48,9 @@ def update_base(ip):
             f.write(data)
 
     f.close()
-    print('Successfully get the file')
+    print('Successfully downloaded file')
     s.close()
-    print('connection closed')
+    print('connection closed with 185.104.113.203')
 
 # Окно приложения
 class App(QtWidgets.QMainWindow, form.Ui_MainWindow):
@@ -63,7 +64,7 @@ class App(QtWidgets.QMainWindow, form.Ui_MainWindow):
         self.pushButton_6.clicked.connect(self.update_keygen)
         
 
-    # Пересобирает (отдает рандомную хар-ку героя)
+    # Замапленные кнопки выполняют функции
     def update_key(self):
         try:
             arr = get_content('Akey')
@@ -82,7 +83,7 @@ class App(QtWidgets.QMainWindow, form.Ui_MainWindow):
     # Кнопка обновления локальной базы
     def update_keygen(self):
         # Спрашиваем у пользователя IP 
-        ip, yes = QtWidgets.QInputDialog.getText(self, 'Вход', 'Введи ip сервера:')
+        ip, yes = QtWidgets.QInputDialog.getText(self, 'Вход', 'Введите ip key-сервера:')
         if yes and valid_ip(ip) or ip == 'localhost':
             try:
                 update_base(ip)
