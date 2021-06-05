@@ -67,12 +67,12 @@ class App(QtWidgets.QMainWindow, form.Ui_MainWindow):
         try:
             arr = get_content('Akey')
             self.textBrowser.setText(arr)
-            arr = get_content('Cname')
-            self.textBrowser_2.setText(arr)
-            arr = get_content('Edate')
-            self.textBrowser_3.setText(arr)
-            arr = get_content('Ktype')
-            self.textBrowser_4.setText(arr)
+            #arr = get_content('Cname')
+            #self.textBrowser_2.setText(arr)
+            #arr = get_content('Edate')
+            #self.textBrowser_3.setText(arr)
+            #arr = get_content('Ktype')
+            #self.textBrowser_4.setText(arr)
         except Exception as e:
             # если ошибка то вылетает окошко с ошибкой
             errorWin = QtWidgets.QErrorMessage(self)
