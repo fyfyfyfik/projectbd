@@ -21,7 +21,7 @@ def main():
         conn, addr = s.accept()
         if conn:
 
-            engine = create_engine('sqlite://~/Project_DB2.db')
+            engine = create_engine('sqlite:////root/Project_DB2.db')
             Session = sessionmaker(bind=engine)
             session = Session()
             key = session.query(keys).all()
