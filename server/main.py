@@ -8,11 +8,11 @@ import os
 import config
 
 port = config.PORT
-host = config.HOST
+host = ''
 
 s = socket.socket()
 s.bind((host, port))
-s.listen(2)
+s.listen(5)
 file = os.getcwd() + '/keys.json'
 
 def main():

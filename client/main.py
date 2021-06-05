@@ -11,7 +11,7 @@ import config
 s = socket.socket()             # Create a socket object
 # Получаем порт и айпи из переменных окружения (для секьюрности)
 port = config.PORT
-host = config.HOST
+host = socket.gethostname()
 
 # Переменная для файла джайсон
 file = os.getcwd() + '/keys.json'
