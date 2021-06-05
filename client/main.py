@@ -67,13 +67,13 @@ class App(QtWidgets.QMainWindow, form.Ui_MainWindow):
     def update_hero(self):
         try:
             arr = get_content('Akey')
-            self.textBrowser.setText(choice(arr))
+            self.textBrowser_4.setText(choice(arr))
             arr = get_content('Cname')
             self.textBrowser_2.setText(choice(arr))
             arr = get_content('Edate')
-            self.textBrowser_3.setText(choice(arr))
+            self.textBrowser_1.setText(choice(arr))
             arr = get_content('Ktype')
-            self.textBrowser_4.setText(choice(arr))
+            self.textBrowser_3.setText(choice(arr))
         except Exception as e:
             # если ошибка то вылетает окошко с ошибкой
             errorWin = QtWidgets.QErrorMessage(self)
