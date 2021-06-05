@@ -4,7 +4,6 @@ import form
 import sys
 import socket                   # Import socket module
 import json
-from random import choice
 from PyQt5 import QtWidgets, uic
 import config
 
@@ -60,10 +59,6 @@ class App(QtWidgets.QMainWindow, form.Ui_MainWindow):
         
         # Коннектим кнопки к нужным функциям
         self.pushButton.clicked.connect(self.update_hero)
-        self.pushButton_2.clicked.connect(self.update_story)
-        self.pushButton_3.clicked.connect(self.update_end)
-        self.pushButton_4.clicked.connect(self.export_json)
-        self.pushButton_5.clicked.connect(self.import_json)
         self.pushButton_6.clicked.connect(self.update_stories)
         
 
@@ -72,32 +67,16 @@ class App(QtWidgets.QMainWindow, form.Ui_MainWindow):
         try:
             arr = get_content('Akey')
             self.textBrowser.setText(arr)
+            arr = get_content('Cname')
+            self.textBrowser_2.setText(arr)
+            arr = get_content('Edate')
+            self.textBrowser_3.setText(arr)
+            arr = get_content('Ktype')
+            self.textBrowser_4.setText(arr)
         except Exception as e:
             # если ошибка то вылетает окошко с ошибкой
             errorWin = QtWidgets.QErrorMessage(self)
             errorWin.showMessage(f'Ошибка: \n{e}')
-
-    def update_story(self):
-        try:
-            arr = get_content('story')
-            self.textBrowser_2.setText(choice(arr))
-        except Exception as e:
-            errorWin = QtWidgets.QErrorMessage(self)
-            errorWin.showMessage(f'Ошибка: \n{e}')
-
-    def update_end(self):
-        try:
-            arr = get_content('end')
-            self.textBrowser_3.setText(choice(arr))
-        except Exception as e:
-            errorWin = QtWidgets.QErrorMessage(self)
-            errorWin.showMessage(f'Ошибка: \n{e}')
-
-    def export_json(self):
-        pass
-    
-    def import_json(self):
-        pass
     
     # Кнопка обновления локальной базы
     def update_stories(self):
