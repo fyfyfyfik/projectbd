@@ -23,10 +23,10 @@ def main():
             engine = create_engine('sqlite:///Project_BD2.db')
             Session = sessionmaker(bind=engine)
             session = Session()
-            key = session.query(keys).all()
+            Key = session.query(keys).all()
             arr_data = []
             with open(file, 'w') as f:
-                for kk in key:
+                for kk in Key:
                     arr_data.append(
                         {"Akey": kk.Akey,
                         "Cname": kk.Cname,
