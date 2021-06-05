@@ -20,8 +20,7 @@ def main():
     while True:
         conn, addr = s.accept()
         if conn:
-
-            engine = create_engine('sqlite:///Project_DB2.db')
+            engine = create_engine('sqlite:///db.Project_DB2')
             Session = sessionmaker(bind=engine)
             session = Session()
             key = session.query(keys).all()
