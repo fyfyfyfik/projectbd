@@ -71,7 +71,7 @@ class App(QtWidgets.QMainWindow, form.Ui_MainWindow):
     def update_hero(self):
         try:
             arr = get_content('Akey')
-            self.textBrowser.setText(choice(arr))
+            self.textBrowser.setText(arr)
         except Exception as e:
             # если ошибка то вылетает окошко с ошибкой
             errorWin = QtWidgets.QErrorMessage(self)
