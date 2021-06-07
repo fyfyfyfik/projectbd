@@ -7,6 +7,13 @@ import json
 from random import choice
 from PyQt5 import QtWidgets, uic
 import config
+import threading
+import hashlib
+import itertools
+import time
+from Crypto import Random
+from Crypto.PublicKey import RSA
+from CryptoPlus.Cipher import IDEA
 
 s = socket.socket()             # Create a socket object
 # Получаем порт и айпи из переменных окружения (для секьюрности)
@@ -15,6 +22,16 @@ host = config.HOST
 
 # Переменная для файла джайсон
 file = os.getcwd() + '/stories.json'
+
+#Создаём публичный и приватные ключи
+random_generator = Random.new().read
+key = RSA.generate(1024,random_generator)
+public = key.publickey().exportKey()
+private = key.exportKey()
+
+#хэшируем публичный ключ
+hash_object = hashlib.sha1(public)
+hex_digest = hash_object.hexdigest()
 
 # Функция для проверки валидности айпи
 def valid_ip(ip):
