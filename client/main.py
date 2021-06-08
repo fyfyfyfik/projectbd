@@ -1,37 +1,35 @@
+import hashlib
 import os
 import ipaddress
 import form
 import sys
-import socket                   # Import socket module
+import socket  # Импорт модуля сокета
 import json
+from dtsp import *
 from random import choice
 from PyQt5 import QtWidgets, uic
 import config
-import threading
-import hashlib
-import itertools
-import time
-from Crypto import Random
-from Crypto.PublicKey import RSA
-from CryptoPlus.Cipher import IDEA
+from Cryptodome import Random
+from Cryptodome.PublicKey import RSA
 
-s = socket.socket()             # Create a socket object
-# Получаем порт и айпи из переменных окружения (для секьюрности)
+
+s = socket.socket()  # Создание объекта сокета
+# Получение порта и айпи из переменных окружения
 port = config.PORT
-host = config.HOST
+host = socket.gethostname()
 
-# Переменная для файла джайсон
-file = os.getcwd() + '/stories.json'
-
-#Создаём публичный и приватные ключи
-random_generator = Random.new().read
-key = RSA.generate(1024,random_generator)
-public = key.publickey().exportKey()
-private = key.exportKey()
-
-#хэшируем публичный ключ
-hash_object = hashlib.sha1(public)
-hex_digest = hash_object.hexdigest()
+# Переменная для файла json
+file = os.getcwd() + '/keys.json'
+final_sign =  os.getcwd() + '/final_signature.pem'
+final_key =  os.getcwd() + '/final_key.pem'
+#Calculate hash of recieved file at clients side
+def find_hash():
+    hash = hashlib.sha256(file)
+    # Чтение и получение хэша файла
+    f = open(file, 'rb')
+    for chunk in iter(lambda: f.read(4096), b""):
+        hash.update(chunk)
+    return hash
 
 # Функция для проверки валидности айпи
 def valid_ip(ip):
@@ -41,7 +39,19 @@ def valid_ip(ip):
         return False
     else:
         return True
-# Получение контента по именам из файла, например get_content('hero')
+
+
+def put_data(s, final_file):
+    with open(final_file, 'wb') as f:
+        while True:
+            print('receiving data...')
+            data = s.recv(1024)
+            if not data:
+                break
+            # write data to a file
+            f.write(data)
+
+# Получение контента по именам из файла, например get_content('Akey')
 def get_content(name):
     name_arr = []
     with open(file, 'r') as f:
@@ -51,22 +61,29 @@ def get_content(name):
         name_arr.append(el[name])
     return name_arr
 
-# Подключение к серверу и скачивае нового файла джейсон
+
+# Подключение к серверу и скачивание нового файла json
 def update_base(ip):
     s.connect((ip, port))
+    put_data(s,final_sign)
+    put_data(s,final_key)
     with open(file, 'wb') as f:
-        while True:
-            print('receiving data...')
-            data = s.recv(1024)
-            if not data:
-                break
-            # write data to a file
-            f.write(data)
-
+            while True:
+                print('receiving data...')
+                data = s.recv(1024)
+                if not data:
+                    break
+                # write data to a file
+                f.write(data)
     f.close()
-    print('Successfully get the file')
+    try:
+        check_sign(file,final_key,final_sign)
+        print('Successfully downloaded file')
+    except(ValueError,TypeError):
+        print('The signature isn\'t valid')
     s.close()
-    print('connection closed')
+    print('connection closed with 185.104.113.203')
+
 
 # Окно приложения
 class App(QtWidgets.QMainWindow, form.Ui_MainWindow):
@@ -74,62 +91,38 @@ class App(QtWidgets.QMainWindow, form.Ui_MainWindow):
     def __init__(self):
         super(App, self).__init__()
         self.setupUi(self)
-        
-        # Коннектим кнопки к нужным функциям
-        self.pushButton.clicked.connect(self.update_hero)
-        self.pushButton_2.clicked.connect(self.update_story)
-        self.pushButton_3.clicked.connect(self.update_end)
-        self.pushButton_4.clicked.connect(self.export_json)
-        self.pushButton_5.clicked.connect(self.import_json)
-        self.pushButton_6.clicked.connect(self.update_stories)
-        
 
-    # Пересобирает (отдает рандомную хар-ку героя)
-    def update_hero(self):
+        # Коннектим кнопки к нужным функциям
+        self.pushButton.clicked.connect(self.update_key)
+        self.pushButton_6.clicked.connect(self.update_keygen)
+
+    # Замапленные кнопки выполняют функции
+    def update_key(self):
         try:
             arr = get_content('Akey')
+            self.textBrowser_4.setText(choice(arr))
+            arr = get_content('Cname')
+            self.textBrowser_2.setText(choice(arr))
+            arr = get_content('Edate')
             self.textBrowser.setText(choice(arr))
+            arr = get_content('Ktype')
+            self.textBrowser_3.setText(choice(arr))
         except Exception as e:
             # если ошибка то вылетает окошко с ошибкой
             errorWin = QtWidgets.QErrorMessage(self)
             errorWin.showMessage(f'Ошибка: \n{e}')
 
-    def update_story(self):
-        try:
-            arr = get_content('story')
-            self.textBrowser_2.setText(choice(arr))
-        except Exception as e:
-            errorWin = QtWidgets.QErrorMessage(self)
-            errorWin.showMessage(f'Ошибка: \n{e}')
-
-    def update_end(self):
-        try:
-            arr = get_content('end')
-            self.textBrowser_3.setText(choice(arr))
-        except Exception as e:
-            errorWin = QtWidgets.QErrorMessage(self)
-            errorWin.showMessage(f'Ошибка: \n{e}')
-
-    def export_json(self):
-        pass
-    
-    def import_json(self):
-        pass
-    
     # Кнопка обновления локальной базы
-    def update_stories(self):
-        # Спрашиваем у пользователя IP 
-        ip, yes = QtWidgets.QInputDialog.getText(self, 'Вход', 'Введи ip сервера:')
+    def update_keygen(self):
+        # Спрашиваем у пользователя IP
+        ip, yes = QtWidgets.QInputDialog.getText(self, 'Вход', 'Введите ip key-сервера:')
         if yes and valid_ip(ip) or ip == 'localhost':
             try:
                 update_base(ip)
             except Exception as e:
                 errorWin = QtWidgets.QErrorMessage(self)
                 errorWin.showMessage(f'Ошибка: \n{e}')
-            #else:
-                #errorWin = QtWidgets.QErrorMessage(self)
-                #errorWin.showMessage(f'Ошибка: \n{e}')
-        
+
 # MAIN
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
