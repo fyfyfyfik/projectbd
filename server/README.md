@@ -17,3 +17,12 @@ edit add_keys.json
 ```
 python3 model.py
 ```
+## For Tanya
+cd projectbd/server
+copy config.py.bak config.py
+virtualenv --python c:\users\администратор\appdata\local\programs\python\python39\python.exe venv
+.\venv\Scripts\activate
+pip install -r requirements.txt
+pip install pycryptodomex --no-binary :all:
+python main.py
+
