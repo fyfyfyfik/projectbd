@@ -3,7 +3,7 @@ import os
 import ipaddress
 import form
 import sys
-import socket  # Импорт модуля сокета
+
 import json
 from dtsp import *
 from random import choice
@@ -12,24 +12,13 @@ import config
 from Cryptodome import Random
 from Cryptodome.PublicKey import RSA
 
-
-s = socket.socket()  # Создание объекта сокета
 # Получение порта и айпи из переменных окружения
 port = config.PORT
 host = socket.gethostname()
 
 # Переменная для файла json
 file = os.getcwd() + '/keys.json'
-final_sign =  os.getcwd() + '/final_signature.pem'
-final_key =  os.getcwd() + '/final_key.pem'
-#Calculate hash of recieved file at clients side
-def find_hash():
-    hash = hashlib.sha256(file)
-    # Чтение и получение хэша файла
-    f = open(file, 'rb')
-    for chunk in iter(lambda: f.read(4096), b""):
-        hash.update(chunk)
-    return hash
+
 
 # Функция для проверки валидности айпи
 def valid_ip(ip):
@@ -40,16 +29,6 @@ def valid_ip(ip):
     else:
         return True
 
-
-def put_data(s, final_file):
-    with open(final_file, 'wb') as f:
-        while True:
-            print('receiving data...')
-            data = s.recv(1024)
-            if not data:
-                break
-            # write data to a file
-            f.write(data)
 
 # Получение контента по именам из файла, например get_content('Akey')
 def get_content(name):
@@ -76,13 +55,7 @@ def update_base(ip):
                 # write data to a file
                 f.write(data)
     f.close()
-    try:
-        check_sign(file,final_key,final_sign)
-        print('Successfully downloaded file')
-    except(ValueError,TypeError):
-        print('The signature isn\'t valid')
-    s.close()
-    print('connection closed with 185.104.113.203')
+ion closed with 185.104.113.203')
 
 
 # Окно приложения
@@ -112,9 +85,6 @@ class App(QtWidgets.QMainWindow, form.Ui_MainWindow):
             errorWin = QtWidgets.QErrorMessage(self)
             errorWin.showMessage(f'Ошибка: \n{e}')
 
-    # Кнопка обновления локальной базы
-    def update_keygen(self):
-        # Спрашиваем у пользователя IP
         ip, yes = QtWidgets.QInputDialog.getText(self, 'Вход', 'Введите ip key-сервера:')
         if yes and valid_ip(ip) or ip == 'localhost':
             try:

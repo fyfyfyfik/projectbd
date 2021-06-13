@@ -1,6 +1,4 @@
-import hashlib
 
-from Cryptodome.Hash import SHA256
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from model import keys
@@ -8,10 +6,7 @@ import socket
 import json
 import os
 import config
-from dtsp import *
-from Cryptodome import Random
-from Cryptodome.PublicKey import RSA
-from Cryptodome.Signature import pkcs1_15
+
 # Конфигурирование порта и хоста из конфига
 port = config.PORT
 host = ''
@@ -67,12 +62,6 @@ def main():
                         "Ktype": kk.Ktype,
                          })
                 f.write(json.dumps({"data": arr_data}, indent=4))
-
-        # Чтение  файла
-        get_signature_and_key()
-
-        f = open(file,'rb')
-        l = f.read(1024)
 
         # Отправка данных
         while (l):
