@@ -1,20 +1,24 @@
+import hashlib
 import os
 import ipaddress
 import form
 import sys
-import socket                   # Импорт модуля сокета
+
 import json
+from dtsp import *
 from random import choice
 from PyQt5 import QtWidgets, uic
 import config
+from Cryptodome import Random
+from Cryptodome.PublicKey import RSA
 
-s = socket.socket()             # Создание объекта сокета
 # Получение порта и айпи из переменных окружения
 port = config.PORT
 host = socket.gethostname()
 
 # Переменная для файла json
 file = os.getcwd() + '/keys.json'
+
 
 # Функция для проверки валидности айпи
 def valid_ip(ip):
@@ -24,6 +28,7 @@ def valid_ip(ip):
         return False
     else:
         return True
+
 
 # Получение контента по именам из файла, например get_content('Akey')
 def get_content(name):
@@ -35,22 +40,23 @@ def get_content(name):
         name_arr.append(el[name])
     return name_arr
 
+
 # Подключение к серверу и скачивание нового файла json
 def update_base(ip):
     s.connect((ip, port))
+    put_data(s,final_sign)
+    put_data(s,final_key)
     with open(file, 'wb') as f:
-        while True:
-            print('receiving data...')
-            data = s.recv(1024)
-            if not data:
-                break
-            # write data to a file
-            f.write(data)
-
+            while True:
+                print('receiving data...')
+                data = s.recv(1024)
+                if not data:
+                    break
+                # write data to a file
+                f.write(data)
     f.close()
-    print('Successfully downloaded file')
-    s.close()
-    print('connection closed with 185.104.113.203')
+ion closed with 185.104.113.203')
+
 
 # Окно приложения
 class App(QtWidgets.QMainWindow, form.Ui_MainWindow):
@@ -58,11 +64,10 @@ class App(QtWidgets.QMainWindow, form.Ui_MainWindow):
     def __init__(self):
         super(App, self).__init__()
         self.setupUi(self)
-        
+
         # Коннектим кнопки к нужным функциям
         self.pushButton.clicked.connect(self.update_key)
         self.pushButton_6.clicked.connect(self.update_keygen)
-        
 
     # Замапленные кнопки выполняют функции
     def update_key(self):
@@ -79,10 +84,7 @@ class App(QtWidgets.QMainWindow, form.Ui_MainWindow):
             # если ошибка то вылетает окошко с ошибкой
             errorWin = QtWidgets.QErrorMessage(self)
             errorWin.showMessage(f'Ошибка: \n{e}')
-    
-    # Кнопка обновления локальной базы
-    def update_keygen(self):
-        # Спрашиваем у пользователя IP 
+
         ip, yes = QtWidgets.QInputDialog.getText(self, 'Вход', 'Введите ip key-сервера:')
         if yes and valid_ip(ip) or ip == 'localhost':
             try:
@@ -90,10 +92,7 @@ class App(QtWidgets.QMainWindow, form.Ui_MainWindow):
             except Exception as e:
                 errorWin = QtWidgets.QErrorMessage(self)
                 errorWin.showMessage(f'Ошибка: \n{e}')
-            #else:
-                #errorWin = QtWidgets.QErrorMessage(self)
-                #errorWin.showMessage(f'Ошибка: \n{e}')
-        
+
 # MAIN
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)

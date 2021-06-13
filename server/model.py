@@ -46,7 +46,7 @@ def add_keys(file_name="add_key.json"):
     # Получаем истории из файла
     keys = get_keys()
     # Создаем новый объект из модели История
-    new_key = keys(keys[0], keys[1], keys[2], keys[3])
+
     # Добавляем
     session.add(new_key)
     # Сохраняем
